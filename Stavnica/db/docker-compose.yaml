@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+
+  Stavnica-database:
+      init: true
+      container_name: stavnica-db
+      image: postgres
+      ports:
+        - "15434:5432"
+      volumes:
+        - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      stdin_open: true
+      environment:
+        POSTGRES_DB: stavnica-db
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
