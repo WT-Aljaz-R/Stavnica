@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Stavnica;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,3 +26,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+var Configuration = builder.Configuration;
+builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
