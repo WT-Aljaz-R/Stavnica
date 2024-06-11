@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Stavnica")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1a8b4c7ce75699888821099328dec1856a39e15")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+81e7515e0d5506258adfd1f8f6d1870caa4acb95")]
 [assembly: System.Reflection.AssemblyProductAttribute("Stavnica")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Stavnica")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -11,4 +11,6 @@ public class SportEvent
     public float SideA { get; set; }
 
     public float SideB { get; set; }
+
+    public string Winner { get; set; }
 }
