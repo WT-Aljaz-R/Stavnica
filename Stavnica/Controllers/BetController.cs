@@ -45,35 +45,27 @@ public class BetController : ControllerBase
     }
 
 
-    [HttpPost]
-    public async Task<ActionResult<Bet>> PostBet(string side, float payIn, int sportEventId, int userId)
-    {
-        SportEvent sportEvent = await _context.SportEvents.FindAsync(sportEventId);
-
-        float sideValue = 1;
-        if (sportEvent != null)
+   [HttpPost]
+        public async Task<ActionResult<Bet>> PostBet([FromBody] BetRequest betRequest)
         {
-            if (side.Equals("A"))
+            SportEvent sportEvent = await _context.SportEvents.FindAsync(betRequest.SportEventId);
+
+            if (sportEvent == null)
             {
-                sideValue = sportEvent.SideA;
+                return NotFound();
             }
-            else if (side.Equals("B"))
-            {
-                sideValue = sportEvent.SideB;
-            }
-        }else {
-            return NotFound();
+
+            float sideValue = betRequest.Side.Equals("A") ? sportEvent.SideA : sportEvent.SideB;
+
+            float payOut = sideValue * betRequest.PayIn;
+
+            Bet bet = new Bet(betRequest.UserId, betRequest.PayIn, payOut, betRequest.SportEventId, betRequest.Side);
+
+            _context.Bets.Add(bet);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetBets), new { id = bet.Id }, bet);
         }
 
-        float payOut = sideValue * payIn;
-
-        Bet bet = new Bet(userId, payIn, payOut, sportEventId, side);
-
-
-        _context.Bets.Add(bet);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetBets), new { id = bet.Id }, bet);
-    }
 
 }

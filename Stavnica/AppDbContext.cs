@@ -9,4 +9,14 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<SportEvent> SportEvents { get; set; }
     public DbSet<Bet> Bets { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            base.OnModelCreating(modelBuilder);
+        }
+
 }

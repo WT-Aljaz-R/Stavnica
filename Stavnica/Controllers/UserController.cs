@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Stavnica.Controllers;
 
@@ -30,12 +31,32 @@ public class UserController : ControllerBase
         return user;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<User>> PostUser(User user)
+    [HttpPost("/api/signup")]
+    public async Task<ActionResult<User>> PostUser([FromBody] UserRequest userRequest)
     {
+        var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == userRequest.Username);
+
+            if (existingUser != null)
+            {
+                return Conflict(new { message = "Username already exists" });
+            }
+
+        User user = new User(userRequest.Username, userRequest.Password);
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+    }
+
+    [HttpPost("/api/login")]
+    public async Task<ActionResult<User>> LoginUser([FromBody] UserRequest userRequest)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == userRequest.Username);
+        if (user.Password == userRequest.Password){
+            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+        }else{
+            return Conflict(new { message = "Wrong credentials" });
+        }  
     }
 }
